@@ -10,7 +10,7 @@
     <meta property="og:type" content="website">
     <title>Speed Pack · Crea tu cuenta</title>
     <link rel="icon" href="./assets/speedpack-app-icon.png" type="image/png">
-    <link rel="stylesheet" href="./styles.css?v=1.0.0">
+    <link rel="stylesheet" href="./styles.css?v=1.1.0">
     <script type="module" src="./app.js?v=1.0.0"></script>
   </head>
   <body class="campaign-page">
@@ -31,8 +31,8 @@
         <div class="hero-grid" aria-hidden="true"></div>
         <div class="hero-copy">
           <div class="system-label"><span aria-hidden="true">●</span><b id="campaign-system-code">SPEEDPACK://REGISTRO</b></div>
-          <p class="eyebrow" id="campaign-eyebrow">TU COURIER, A TU VELOCIDAD</p>
-          <h1 id="campaign-headline">COMPRA ONLINE.<br>RECIBE RAPIDO.</h1>
+          <p class="eyebrow" id="campaign-eyebrow">TU COURIER A TU VELOCIDAD</p>
+          <h1 id="campaign-headline" aria-label="Compra online. Recibe rápido.">COMPRA ONLINE.<br>RECIBE R<span class="accented-letter accented-a" aria-hidden="true">A</span>PIDO.</h1>
           <p class="hero-intro" id="campaign-description">Crea tu cuenta Speed Pack sin costo. Nosotros revisamos tus datos y te enviamos tu código de cliente.</p>
 
           <div class="hero-actions">
@@ -52,7 +52,7 @@
         <figure class="brand-art-frame">
           <div class="art-window-bar"><span class="window-title">SPEEDY_OFICIAL.PNG</span><span class="window-controls" aria-hidden="true">— □ ×</span></div>
           <img src="./assets/speedpack-credentials-art.png" alt="Speedy, la mascota robot oficial de Speed Pack, sosteniendo un paquete" width="2560" height="1920" fetchpriority="high">
-          <figcaption>ACTIVO OFICIAL · SPEED PACK</figcaption>
+          <figcaption>ACTIVO OFICIAL · SPEEDPACK</figcaption>
         </figure>
       </section>
 
@@ -64,7 +64,7 @@
         <div class="registration-grid" aria-hidden="true"></div>
         <div class="registration-intro">
           <p class="eyebrow dark">TU CUENTA SPEED PACK</p>
-          <h2>TODO EMPIEZA<br>AQUI.</h2>
+          <h2 aria-label="Todo empieza aquí.">TODO EMPIEZA<br>AQU<span class="accented-letter accented-i" aria-hidden="true">I</span>.</h2>
           <p>Solo pedimos los datos necesarios para crear y operar tu cuenta. Completa cada campo exactamente como aparece en tus documentos.</p>
           <div class="data-points">
             <div><strong>06</strong><span>DATOS<br>NECESARIOS</span></div>
@@ -98,7 +98,7 @@
 
             <div class="field-grid two-columns">
               <div class="field">
-                <label for="document-number"><span>02</span> CEDULA</label>
+              <label for="document-number"><span>02</span> CÉDULA</label>
                 <input id="document-number" name="documentNumber" type="text" inputmode="numeric" autocomplete="off" maxlength="13" placeholder="000-0000000-0" aria-describedby="documentNumber-error" required>
                 <p class="field-error" id="documentNumber-error"></p>
               </div>
@@ -111,20 +111,20 @@
 
             <div class="field-grid two-columns">
               <div class="field">
-                <label for="phone"><span>04</span> TELEFONO</label>
+                <label for="phone"><span>04</span> TELÉFONO</label>
                 <div class="phone-field"><b>+1</b><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="809 555 1234" maxlength="12" aria-describedby="phone-hint phone-error" required></div>
                 <p class="field-hint" id="phone-hint">Usaremos este número para contactarte por WhatsApp.</p>
                 <p class="field-error" id="phone-error"></p>
               </div>
               <div class="field">
-                <label for="email"><span>05</span> CORREO ELECTRONICO</label>
+                <label for="email"><span>05</span> CORREO ELECTRÓNICO</label>
                 <input id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" placeholder="nombre@correo.com" aria-describedby="email-error" required>
                 <p class="field-error" id="email-error"></p>
               </div>
             </div>
 
             <div class="field">
-              <label for="address-line"><span>06</span> DIRECCION EXACTA DE RESIDENCIA</label>
+              <label for="address-line"><span>06</span> DIRECCIÓN EXACTA DE RESIDENCIA</label>
               <textarea id="address-line" name="addressLine" autocomplete="street-address" rows="4" maxlength="300" placeholder="Calle, número, edificio o residencial, apartamento, sector, municipio y provincia" aria-describedby="addressLine-hint addressLine-error" required></textarea>
               <div class="field-meta"><p class="field-hint" id="addressLine-hint">Incluye todos los detalles necesarios para localizar tu residencia sin llamarte.</p><span id="address-count">0/300</span></div>
               <p class="field-error" id="addressLine-error"></p>
@@ -141,7 +141,7 @@
             <button class="brand-button brand-button-primary submit-button" id="submit-registration" type="submit">
               <span>ENVIAR REGISTRO</span><b aria-hidden="true">→</b>
             </button>
-            <p class="secure-submit"><span>●</span> CONEXION SEGURA · NO SOLICITAMOS PAGOS AQUI</p>
+            <p class="secure-submit"><span>●</span> CONEXIÓN SEGURA · NO SOLICITAMOS PAGOS AQUÍ</p>
           </form>
 
           <section class="confirmation" id="confirmation" aria-labelledby="confirmation-title" hidden>
@@ -150,12 +150,12 @@
             <h2 id="confirmation-title" tabindex="-1">¡LISTO, <span id="confirmation-name"></span>!</h2>
             <p>Revisaremos tus datos y enviaremos tu código Speed Pack y la dirección de tu casillero por WhatsApp o correo.</p>
             <div class="request-code">
-              <span>NUMERO DE SOLICITUD</span>
+              <span>NÚMERO DE SOLICITUD</span>
               <div><strong id="confirmation-code"></strong><button id="copy-code" type="button" aria-label="Copiar número de solicitud">COPIAR</button></div>
             </div>
             <ol class="next-steps">
               <li><span>1</span> REVISAMOS TUS DATOS</li>
-              <li><span>2</span> RECIBES TU CODIGO</li>
+              <li><span>2</span> RECIBES TU CÓDIGO</li>
               <li><span>3</span> EMPIEZAS A RECIBIR TUS PAQUETES</li>
             </ol>
             <a class="brand-button brand-button-primary" id="confirmation-whatsapp" href="#" hidden>ESCRIBIR A SPEED PACK →</a>
@@ -167,12 +167,12 @@
 
       <section class="how-section" id="como-funciona">
         <div class="section-heading">
-          <p class="eyebrow">VELOCIDAD MAXIMA</p>
+          <p class="eyebrow">VELOCIDAD MÁXIMA</p>
           <h2>DE TU CARRITO<br>A TUS MANOS.</h2>
         </div>
         <ol class="process-grid">
-          <li><span>1</span><h3>REGISTRATE</h3><p>Completa tus seis datos.</p></li>
-          <li><span>2</span><h3>RECIBE TU CODIGO</h3><p>Te enviamos tu casillero.</p></li>
+          <li><span>1</span><h3>REGÍSTRATE</h3><p>Completa tus seis datos.</p></li>
+          <li><span>2</span><h3>RECIBE TU CÓDIGO</h3><p>Te enviamos tu casillero.</p></li>
           <li><span>3</span><h3>COMPRA ONLINE</h3><p>Usa tus datos al pagar.</p></li>
           <li><span>4</span><h3>RECIBE TU PAQUETE</h3><p>Coordinamos la entrega.</p></li>
         </ol>
@@ -185,26 +185,26 @@
         </div>
         <div class="faq-list">
           <details>
-            <summary>¿CUANDO RECIBO MI CODIGO?<span>+</span></summary>
+            <summary>¿CUÁNDO RECIBO MI CÓDIGO?<span>+</span></summary>
             <p>Después de validar tus datos, enviaremos por WhatsApp o correo tu código de cliente y la dirección que usarás en tus compras.</p>
           </details>
           <details>
-            <summary>¿REGISTRARME TIENE ALGUN COSTO?<span>+</span></summary>
+            <summary>¿REGISTRARME TIENE ALGÚN COSTO?<span>+</span></summary>
             <p>No. Completar este formulario y solicitar tu cuenta Speed Pack no tiene costo.</p>
           </details>
           <details>
-            <summary>¿LA OFICINA DE LOS PRADOS ESTA ABIERTA?<span>+</span></summary>
+            <summary>¿LA OFICINA DE LOS PRADOS ESTÁ ABIERTA?<span>+</span></summary>
             <p>Todavía no está abierta al público. Actualmente coordinamos la entrega dentro de las zonas habilitadas.</p>
           </details>
           <details>
-            <summary>¿COMO PROTEGEN MIS DATOS?<span>+</span></summary>
+            <summary>¿CÓMO PROTEGEN MIS DATOS?<span>+</span></summary>
             <p>Los registros llegan a una hoja privada de Speed Pack y se usan únicamente para crear y administrar tu cuenta y contactarte sobre el servicio.</p>
           </details>
         </div>
       </section>
 
       <section class="data-use-section" id="uso-de-datos" aria-labelledby="data-use-title">
-        <p class="eyebrow">INFORMACION CLARA</p>
+        <p class="eyebrow">INFORMACIÓN CLARA</p>
         <h2 id="data-use-title">USO DE TUS DATOS.</h2>
         <p>Speed Pack solicita nombre completo, cédula, correo electrónico, dirección exacta de residencia, teléfono y fecha de nacimiento para verificar tu solicitud, crear y administrar tu cuenta de courier y comunicarse contigo sobre el servicio.</p>
         <p>No solicitamos pagos ni datos de tarjetas en este formulario. Puedes pedir información, corrección o eliminación de tus datos respondiendo al contacto oficial por el que recibas tu código.</p>
