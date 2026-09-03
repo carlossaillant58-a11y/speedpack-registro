@@ -163,6 +163,7 @@ button { cursor: pointer; }
 }
 .hero h1 { max-width: 720px; color: var(--neon); font-size: clamp(3.25rem, 6.6vw, 6.7rem); }
 .accented-letter { position: relative; display: inline-block; }
+.no-break { white-space: nowrap; }
 .accented-letter::after { content: ""; position: absolute; top: -.08em; width: .22em; height: .07em; background: currentColor; transform: rotate(-55deg); transform-origin: center; }
 .accented-a::after { left: .43em; }
 .accented-i::after { left: .18em; }
