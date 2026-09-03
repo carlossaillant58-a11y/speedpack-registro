@@ -265,6 +265,14 @@ function updateDocumentField() {
   $('#documentNumber-error').textContent = '';
 }
 
+function updateConsentStatus() {
+  const consent = $('#privacy-consent');
+  const panel = $('#consent-panel');
+  const status = $('#privacyConsent-status');
+  panel.classList.toggle('is-authorized', consent.checked);
+  status.hidden = !consent.checked;
+}
+
 function init() {
   $('#current-year').textContent = new Date().getFullYear();
   form.addEventListener('submit', submitRegistration);
@@ -272,6 +280,11 @@ function init() {
   $('#document-type').addEventListener('change', updateDocumentField);
   $('#document-number').addEventListener('input', formatDocumentNumber);
   $('#birth-date').addEventListener('input', formatBirthDate);
+  $('#privacy-consent').addEventListener('change', updateConsentStatus);
+  $('#consent-panel').addEventListener('click', (event) => {
+    if (event.target.closest('input, label, a')) return;
+    $('#privacy-consent').click();
+  });
   $('#address-line').addEventListener('input', (event) => {
     $('#address-count').textContent = `${event.target.value.length}/300`;
   });

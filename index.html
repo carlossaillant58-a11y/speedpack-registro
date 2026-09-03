@@ -10,8 +10,8 @@
     <meta property="og:type" content="website">
     <title>Speed Pack · Crea tu cuenta</title>
     <link rel="icon" href="./assets/speedpack-app-icon.png" type="image/png">
-    <link rel="stylesheet" href="./styles.css?v=1.4.0">
-    <script type="module" src="./app.js?v=1.1.0"></script>
+    <link rel="stylesheet" href="./styles.css?v=1.4.1">
+    <script type="module" src="./app.js?v=1.1.1"></script>
   </head>
   <body class="campaign-page">
     <a class="skip-link" href="#main">Saltar al contenido</a>
@@ -149,11 +149,13 @@
               <p class="field-error" id="addressLine-error"></p>
             </div>
 
-            <div class="consent-panel">
-              <label>
-                <input type="checkbox" name="privacyConsent" aria-describedby="privacyConsent-error" required>
-                <span>Autorizo a Speed Pack a usar estos datos exclusivamente para revisar mi solicitud, crear y administrar mi cuenta y contactarme sobre el servicio. Consulta el <a href="#uso-de-datos">uso de datos</a>.</span>
-              </label>
+            <div class="consent-panel" id="consent-panel">
+              <div class="consent-choice">
+                <input id="privacy-consent" type="checkbox" name="privacyConsent" aria-describedby="privacyConsent-status privacyConsent-error" required>
+                <label for="privacy-consent">Autorizo a Speed Pack a usar estos datos exclusivamente para revisar mi solicitud, crear y administrar mi cuenta y contactarme sobre el servicio.</label>
+              </div>
+              <a class="consent-details" href="#uso-de-datos">Consultar el uso de datos</a>
+              <p class="consent-status" id="privacyConsent-status" hidden><span aria-hidden="true">✓</span> AUTORIZACIÓN MARCADA · SE REGISTRARÁ CON LA SOLICITUD</p>
               <p class="field-error" id="privacyConsent-error"></p>
             </div>
 

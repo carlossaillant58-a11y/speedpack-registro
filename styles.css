@@ -266,15 +266,22 @@ input, textarea, select { width: 100%; min-height: 51px; padding: 13px 14px; bor
 textarea { min-height: 112px; resize: vertical; }
 input::placeholder, textarea::placeholder { color: var(--purple); opacity: 1; }
 input:hover, textarea:hover, select:hover { border-color: var(--purple); }
-input:focus, textarea:focus, select:focus { border-color: var(--night); box-shadow: 0 0 0 3px var(--neon); }
+input:focus, textarea:focus, select:focus { border-color: var(--purple); background-color: #fff; box-shadow: none; }
 input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="true"] { border-color: var(--night); background: var(--mint); }
 .phone-field { display: grid; grid-template-columns: 58px minmax(0, 1fr); align-items: stretch; width: 100%; min-height: 55px; border: 2px solid var(--purple-dark); background: var(--purple-dark); }
-.phone-field:focus-within { border-color: var(--night); box-shadow: 0 0 0 3px var(--neon); }.phone-field b { display: grid; place-items: center; min-width: 0; padding-top: 1px; color: var(--neon); font-size: 16px; line-height: 1; }.phone-field input { min-width: 0; min-height: 51px; padding-block: 13px; border: 0; line-height: 1.45; text-align: left; }.phone-field input:focus { border: 0; box-shadow: none; }
+.phone-field:focus-within { border-color: var(--purple); box-shadow: none; }.phone-field b { display: grid; place-items: center; min-width: 0; padding-top: 1px; color: var(--neon); font-size: 16px; line-height: 1; }.phone-field input { min-width: 0; min-height: 51px; padding-block: 13px; border: 0; line-height: 1.45; text-align: left; }.phone-field input:focus { border: 0; box-shadow: none; }
 .field-hint, .field-meta { color: var(--purple); font-family: var(--font-ui-mono); font-size: .64rem; }.field-hint { margin: 6px 0 0; }.field-meta { display: flex; justify-content: space-between; gap: 12px; }.field-meta .field-hint { max-width: 540px; }.field-meta > span { margin-top: 6px; white-space: nowrap; }
 .field-error { min-height: 0; margin: 6px 0 0; color: var(--night); font-size: .64rem; font-weight: 700; }.field-error:not(:empty)::before { content: "ERROR_404: "; color: var(--purple); }.field-error:empty { margin: 0; }
-.consent-panel { margin: 28px 0; padding: 15px; border: 2px solid var(--purple-dark); background: var(--mint); }
-.consent-panel label { display: grid; grid-template-columns: 22px 1fr; gap: 11px; align-items: start; cursor: pointer; }
-.consent-panel input { width: 21px; min-height: 21px; margin: 1px 0 0; accent-color: var(--purple-dark); box-shadow: none; }.consent-panel label span { font-size: .7rem; line-height: 1.45; }.consent-panel a { color: var(--purple); font-weight: 700; }
+.consent-panel { margin: 28px 0; padding: 15px; border: 2px solid var(--purple-dark); background: var(--mint); transition: background-color .18s ease, border-color .18s ease; }
+.consent-panel.is-authorized { border-color: var(--purple); background: #e7f7b8; }
+.consent-choice { display: grid; grid-template-columns: 24px 1fr; gap: 11px; align-items: start; }
+.consent-choice label { cursor: pointer; font-size: .7rem; line-height: 1.45; }
+.consent-panel input[type="checkbox"] { width: 22px; height: 22px; min-height: 22px; margin: 1px 0 0; padding: 0; border: 0; accent-color: var(--purple-dark); box-shadow: none; cursor: pointer; -webkit-appearance: checkbox; appearance: auto; }
+.consent-panel input[type="checkbox"]:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
+.consent-details { display: inline-block; margin: 9px 0 0 35px; color: var(--purple); font-size: .66rem; font-weight: 700; }
+.consent-status { display: flex; align-items: center; gap: 7px; margin: 12px 0 0 35px; color: var(--night); font-family: var(--font-ui-mono); font-size: .6rem; font-weight: 800; line-height: 1.4; }
+.consent-status[hidden] { display: none; }
+.consent-status span { display: grid; place-items: center; width: 19px; height: 19px; flex: none; background: var(--neon); color: var(--night); }
 .submit-button { width: 100%; }.submit-button b { font-size: 1.3rem; }.secure-submit { margin: 13px 0 0; color: var(--purple); font-family: var(--font-ui-mono); font-size: .62rem; font-weight: 700; line-height: 1.45; text-align: center; }.secure-submit span { color: var(--night); }
 
 .confirmation { text-align: center; }
