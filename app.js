@@ -59,6 +59,21 @@ function validCedula(value) {
   return (10 - (sum % 10)) % 10 === Number(digits[10]);
 }
 
+function validRnc(value) {
+  const digits = value.replace(/\D/g, '');
+  if (!/^\d{9}$/.test(digits) || /^(\d)\1{8}$/.test(digits)) return false;
+  const weights = [7, 9, 8, 6, 5, 4, 3, 2];
+  const sum = weights.reduce((total, weight, index) => total + (Number(digits[index]) * weight), 0);
+  const remainder = 11 - (sum % 11);
+  const checkDigit = remainder === 10 ? 1 : remainder === 11 ? 2 : remainder;
+  return checkDigit === Number(digits[8]);
+}
+
+function validPassport(value) {
+  const normalized = value.trim().toUpperCase();
+  return /^[A-Z0-9][A-Z0-9-]{4,18}[A-Z0-9]$/.test(normalized);
+}
+
 function localDateString(date = new Date()) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -67,15 +82,25 @@ function localDateString(date = new Date()) {
 }
 
 function validBirthDate(value) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
-  const [year, month, day] = value.split('-').map(Number);
+  if (!/^\d{2}\/\d{2}\/\d{4}$/.test(value)) return false;
+  const [day, month, year] = value.split('/').map(Number);
   const date = new Date(Date.UTC(year, month - 1, day, 12));
+  const isoDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
   return !Number.isNaN(date.valueOf())
     && date.getUTCFullYear() === year
     && date.getUTCMonth() === month - 1
     && date.getUTCDate() === day
     && year >= 1900
-    && value <= localDateString();
+    && isoDate <= localDateString();
+}
+
+function birthDateToISO(value) {
+  const [day, month, year] = value.split('/');
+  return `${year}-${month}-${day}`;
+}
+
+function documentTypeLabel(type) {
+  return ({ cedula: 'CÉDULA', rnc: 'RNC', pasaporte: 'PASAPORTE' })[type] || 'IDENTIFICACIÓN';
 }
 
 function validateForm() {
@@ -84,11 +109,17 @@ function validateForm() {
   if (fullName.length < 5 || fullName.length > 120 || fullName.split(' ').filter(Boolean).length < 2 || !/^[\p{L}\p{M}'’\-. ]+$/u.test(fullName)) {
     errors.fullName = 'Escribe al menos un nombre y un apellido, sin números.';
   }
-  if (!validCedula(fieldValue('documentNumber'))) {
+  const documentType = fieldValue('documentType');
+  const documentNumber = fieldValue('documentNumber');
+  if (documentType === 'cedula' && !validCedula(documentNumber)) {
     errors.documentNumber = 'La cédula no supera la verificación. Revisa los 11 dígitos.';
+  } else if (documentType === 'rnc' && !validRnc(documentNumber)) {
+    errors.documentNumber = 'El RNC no supera la verificación. Revisa los 9 dígitos.';
+  } else if (documentType === 'pasaporte' && !validPassport(documentNumber)) {
+    errors.documentNumber = 'Escribe un pasaporte válido de 6 a 20 caracteres.';
   }
   if (!validBirthDate(fieldValue('birthDate'))) {
-    errors.birthDate = 'Selecciona una fecha de nacimiento válida.';
+    errors.birthDate = 'Escribe una fecha válida con el formato DD/MM/AAAA.';
   }
   if (!normalizePhone(fieldValue('phone'))) {
     errors.phone = 'Usa un número dominicano válido: 809, 829 o 849.';
@@ -116,10 +147,13 @@ function createConfirmationCode() {
 
 function payloadFromForm(confirmationCode) {
   const query = new URLSearchParams(location.search);
+  const documentType = fieldValue('documentType');
+  const documentNumber = fieldValue('documentNumber').toUpperCase();
   return {
     fullName: fieldValue('fullName').replace(/\s+/g, ' '),
-    documentNumber: fieldValue('documentNumber'),
-    birthDate: fieldValue('birthDate'),
+    documentType,
+    documentNumber: `${documentTypeLabel(documentType)}: ${documentNumber}`,
+    birthDate: birthDateToISO(fieldValue('birthDate')),
     phone: normalizePhone(fieldValue('phone')),
     email: fieldValue('email').toLowerCase(),
     addressLine: fieldValue('addressLine').replace(/\s+/g, ' '),
@@ -186,22 +220,58 @@ function formatPhone(event) {
   event.target.value = parts.join(' ');
 }
 
-function formatCedula(event) {
-  const digits = event.target.value.replace(/\D/g, '').slice(0, 11);
-  event.target.value = digits.length <= 3
+function formatDocumentNumber(event) {
+  const documentType = fieldValue('documentType');
+  if (documentType === 'cedula') {
+    const digits = event.target.value.replace(/\D/g, '').slice(0, 11);
+    event.target.value = digits.length <= 3
+      ? digits
+      : digits.length <= 10
+        ? `${digits.slice(0, 3)}-${digits.slice(3)}`
+        : `${digits.slice(0, 3)}-${digits.slice(3, 10)}-${digits.slice(10)}`;
+    return;
+  }
+  if (documentType === 'rnc') {
+    event.target.value = event.target.value.replace(/\D/g, '').slice(0, 9);
+    return;
+  }
+  event.target.value = event.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 20);
+}
+
+function formatBirthDate(event) {
+  const digits = event.target.value.replace(/\D/g, '').slice(0, 8);
+  event.target.value = digits.length <= 2
     ? digits
-    : digits.length <= 10
-      ? `${digits.slice(0, 3)}-${digits.slice(3)}`
-      : `${digits.slice(0, 3)}-${digits.slice(3, 10)}-${digits.slice(10)}`;
+    : digits.length <= 4
+      ? `${digits.slice(0, 2)}/${digits.slice(2)}`
+      : `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+}
+
+function updateDocumentField() {
+  const type = fieldValue('documentType');
+  const input = $('#document-number');
+  const label = $('#document-number-label');
+  const settings = {
+    cedula: { label: 'NÚMERO DE CÉDULA', placeholder: '000-0000000-0', inputMode: 'numeric', maxLength: 13 },
+    rnc: { label: 'NÚMERO DE RNC', placeholder: '000000000', inputMode: 'numeric', maxLength: 9 },
+    pasaporte: { label: 'NÚMERO DE PASAPORTE', placeholder: 'Ej. PA1234567', inputMode: 'text', maxLength: 20 },
+  }[type];
+  label.textContent = settings.label;
+  input.placeholder = settings.placeholder;
+  input.inputMode = settings.inputMode;
+  input.maxLength = settings.maxLength;
+  input.value = '';
+  input.removeAttribute('aria-invalid');
+  $('#documentNumber-error').textContent = '';
 }
 
 function init() {
   $('#current-year').textContent = new Date().getFullYear();
-  $('#birth-date').max = localDateString();
-  $('#birth-date').min = '1900-01-01';
   form.addEventListener('submit', submitRegistration);
   $('#phone').addEventListener('input', formatPhone);
-  $('#document-number').addEventListener('input', formatCedula);
+  $('#document-type').addEventListener('change', updateDocumentField);
+  $('#document-number').addEventListener('input', formatDocumentNumber);
+  $('#birth-date').addEventListener('input', formatBirthDate);
   $('#address-line').addEventListener('input', (event) => {
     $('#address-count').textContent = `${event.target.value.length}/300`;
   });

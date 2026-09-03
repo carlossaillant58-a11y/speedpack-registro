@@ -257,17 +257,19 @@ button { cursor: pointer; }
 .field { margin-bottom: 21px; }
 .field label { display: flex; gap: 8px; margin-bottom: 7px; color: var(--night); font-family: var(--font-ui-mono); font-size: .72rem; font-weight: 800; letter-spacing: .02em; line-height: 1.35; }
 .field label > span { color: var(--purple); }
-input, textarea { width: 100%; min-height: 51px; padding: 13px 14px; border: 2px solid var(--purple-dark); border-radius: 0; background: var(--paper); color: var(--night); font-size: 16px; outline: none; }
-input[type="date"] { display: block; min-width: 0; text-align: left; }
-input[type="date"]::-webkit-date-and-time-value { min-height: 24px; margin: 0; text-align: left; }
-input[type="date"]::-webkit-datetime-edit { display: block; padding: 0; text-align: left; }
+input, textarea, select { width: 100%; min-height: 51px; padding: 13px 14px; border: 2px solid var(--purple-dark); border-radius: 0; background: var(--paper); color: var(--night); font-family: inherit; font-size: 16px; line-height: 1.45; outline: none; -webkit-appearance: none; appearance: none; }
+.date-text { display: block; min-width: 0; text-align: left; }
+.select-wrap { position: relative; }
+.select-wrap::after { position: absolute; top: 50%; right: 15px; color: var(--purple-dark); content: "▼"; font-size: .72rem; pointer-events: none; transform: translateY(-50%); }
+.select-wrap select { padding-right: 42px; cursor: pointer; }
+.subfield-label { margin-top: 13px; font-size: .62rem !important; }
 textarea { min-height: 112px; resize: vertical; }
 input::placeholder, textarea::placeholder { color: var(--purple); opacity: 1; }
-input:hover, textarea:hover { border-color: var(--purple); }
-input:focus, textarea:focus { border-color: var(--night); box-shadow: 5px 5px 0 var(--neon); }
-input[aria-invalid="true"], textarea[aria-invalid="true"] { border-color: var(--night); background: var(--mint); }
-.phone-field { display: grid; grid-template-columns: 58px minmax(0, 1fr); align-items: stretch; min-height: 55px; border: 2px solid var(--purple-dark); background: var(--purple-dark); }
-.phone-field:focus-within { box-shadow: 5px 5px 0 var(--neon); }.phone-field b { display: grid; place-items: center; min-width: 0; padding-top: 1px; color: var(--neon); font-size: 16px; line-height: 1; }.phone-field input { min-width: 0; min-height: 51px; padding-block: 13px; border: 0; line-height: 1.45; text-align: left; }
+input:hover, textarea:hover, select:hover { border-color: var(--purple); }
+input:focus, textarea:focus, select:focus { border-color: var(--night); box-shadow: 0 0 0 3px var(--neon); }
+input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="true"] { border-color: var(--night); background: var(--mint); }
+.phone-field { display: grid; grid-template-columns: 58px minmax(0, 1fr); align-items: stretch; width: 100%; min-height: 55px; border: 2px solid var(--purple-dark); background: var(--purple-dark); }
+.phone-field:focus-within { border-color: var(--night); box-shadow: 0 0 0 3px var(--neon); }.phone-field b { display: grid; place-items: center; min-width: 0; padding-top: 1px; color: var(--neon); font-size: 16px; line-height: 1; }.phone-field input { min-width: 0; min-height: 51px; padding-block: 13px; border: 0; line-height: 1.45; text-align: left; }.phone-field input:focus { border: 0; box-shadow: none; }
 .field-hint, .field-meta { color: var(--purple); font-family: var(--font-ui-mono); font-size: .64rem; }.field-hint { margin: 6px 0 0; }.field-meta { display: flex; justify-content: space-between; gap: 12px; }.field-meta .field-hint { max-width: 540px; }.field-meta > span { margin-top: 6px; white-space: nowrap; }
 .field-error { min-height: 0; margin: 6px 0 0; color: var(--night); font-size: .64rem; font-weight: 700; }.field-error:not(:empty)::before { content: "ERROR_404: "; color: var(--purple); }.field-error:empty { margin: 0; }
 .consent-panel { margin: 28px 0; padding: 15px; border: 2px solid var(--purple-dark); background: var(--mint); }
