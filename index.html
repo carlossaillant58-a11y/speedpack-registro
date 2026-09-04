@@ -4,21 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#331A63">
-    <meta name="description" content="Crea tu cuenta Speed Pack para recibir tus compras online con un proceso rápido, claro y seguro.">
-    <meta property="og:title" content="Speed Pack · Crea tu cuenta">
-    <meta property="og:description" content="Regístrate en Speed Pack y recibe tus compras online.">
+    <meta name="description" content="Crea tu cuenta Speedpack para recibir tus compras online con un proceso rápido, claro y seguro.">
+    <meta property="og:title" content="Speedpack · Crea tu cuenta">
+    <meta property="og:description" content="Regístrate en Speedpack y recibe tus compras online.">
     <meta property="og:type" content="website">
-    <title>Speed Pack · Crea tu cuenta</title>
+    <title>Speedpack · Crea tu cuenta</title>
     <link rel="icon" href="./assets/speedpack-app-icon.png" type="image/png">
-    <link rel="stylesheet" href="./styles.css?v=1.4.1">
-    <script type="module" src="./app.js?v=1.1.1"></script>
+    <link rel="stylesheet" href="./styles.css?v=2.0.0">
+    <script type="module" src="./app.js?v=2.0.0"></script>
   </head>
   <body class="campaign-page">
     <a class="skip-link" href="#main">Saltar al contenido</a>
 
     <header class="site-header">
-      <a class="brand-lockup" href="#inicio" aria-label="Speed Pack, inicio">
-        <img src="./assets/speedpack-logo-neon.svg" alt="Speed Pack" width="250" height="58">
+      <a class="brand-lockup" href="#inicio" aria-label="Speedpack, inicio">
+        <img src="./assets/speedpack-logo-neon.svg" alt="Speedpack" width="250" height="58">
       </a>
       <a class="header-help" id="header-help" href="#preguntas">
         <span class="status-dot" aria-hidden="true"></span>
@@ -31,9 +31,15 @@
         <div class="hero-grid" aria-hidden="true"></div>
         <div class="hero-copy">
           <div class="system-label"><span aria-hidden="true">●</span><b id="campaign-system-code">SPEEDPACK://REGISTRO</b></div>
+          <div class="campaign-context" id="campaign-context" aria-live="polite">
+            <span id="campaign-source-badge">VÍA PÚBLICA</span>
+            <b id="campaign-campus-name">REGISTRO GENERAL</b>
+            <small id="campaign-piece-code">QR GENERAL</small>
+          </div>
+          <div class="source-warning" id="source-warning" role="status" hidden>El campus indicado no existe o está inactivo. Continuaremos como registro general de vía pública.</div>
           <p class="eyebrow" id="campaign-eyebrow">TU COURIER A TU VELOCIDAD</p>
           <h1 id="campaign-headline" aria-label="Compra online. Recibe rápido.">COMPRA ONLINE.<br>RECIBE <span class="no-break">R<span class="accented-letter accented-a" aria-hidden="true">A</span>PIDO.</span></h1>
-          <p class="hero-intro" id="campaign-description">Crea tu cuenta Speed Pack sin costo. Nosotros revisamos tus datos y te enviamos tu código de cliente.</p>
+          <p class="hero-intro" id="campaign-description">Crea tu cuenta Speedpack sin costo. Nosotros revisamos tus datos y te enviamos tu código de cliente.</p>
 
           <div class="hero-actions">
             <a class="brand-button brand-button-primary" href="#registro" data-start-registration>
@@ -49,7 +55,7 @@
           </ul>
         </div>
 
-        <aside class="service-card" aria-label="Registro digital Speed Pack">
+        <aside class="service-card" aria-label="Registro digital Speedpack">
           <div class="service-card-bar"><span>SPEEDPACK_ONLINE</span><span aria-hidden="true">●</span></div>
           <div class="service-card-body">
             <div class="service-card-heading">
@@ -73,7 +79,7 @@
       <section class="registration-section" id="registro">
         <div class="registration-grid" aria-hidden="true"></div>
         <div class="registration-intro">
-          <p class="eyebrow dark">TU CUENTA SPEED PACK</p>
+          <p class="eyebrow dark">TU CUENTA SPEEDPACK</p>
           <h2 aria-label="Todo empieza aquí.">TODO EMPIEZA<br>AQU<span class="accented-letter accented-i" aria-hidden="true">I</span>.</h2>
           <p>Solo pedimos los datos necesarios para crear y operar tu cuenta. Completa cada campo exactamente como aparece en tus documentos.</p>
           <div class="data-points">
@@ -152,7 +158,7 @@
             <div class="consent-panel" id="consent-panel">
               <div class="consent-choice">
                 <input id="privacy-consent" type="checkbox" name="privacyConsent" aria-describedby="privacyConsent-status privacyConsent-error" required>
-                <label for="privacy-consent">Autorizo a Speed Pack a usar estos datos exclusivamente para revisar mi solicitud, crear y administrar mi cuenta y contactarme sobre el servicio.</label>
+                <label for="privacy-consent">Autorizo a Speedpack a usar estos datos exclusivamente para revisar mi solicitud, crear y administrar mi cuenta y contactarme sobre el servicio.</label>
               </div>
               <a class="consent-details" href="#uso-de-datos">Consultar el uso de datos</a>
               <p class="consent-status" id="privacyConsent-status" hidden><span aria-hidden="true">✓</span> AUTORIZACIÓN MARCADA · SE REGISTRARÁ CON LA SOLICITUD</p>
@@ -169,7 +175,7 @@
             <div class="success-console">✓</div>
             <p class="eyebrow dark">REGISTRO RECIBIDO</p>
             <h2 id="confirmation-title" tabindex="-1">¡LISTO, <span id="confirmation-name"></span>!</h2>
-            <p>Revisaremos tus datos y enviaremos tu código Speed Pack y la dirección de tu casillero por WhatsApp o correo.</p>
+            <p>Revisaremos tus datos y enviaremos tu código Speedpack y la dirección de tu casillero por WhatsApp o correo.</p>
             <div class="request-code">
               <span>NÚMERO DE SOLICITUD</span>
               <div><strong id="confirmation-code"></strong><button id="copy-code" type="button" aria-label="Copiar número de solicitud">COPIAR</button></div>
@@ -179,7 +185,14 @@
               <li><span>2</span> RECIBES TU CÓDIGO</li>
               <li><span>3</span> EMPIEZAS A RECIBIR TUS PAQUETES</li>
             </ol>
-            <a class="brand-button brand-button-primary" id="confirmation-whatsapp" href="#" hidden>ESCRIBIR A SPEED PACK →</a>
+            <div class="campus-followup" id="campus-followup" hidden>
+              <span class="campus-followup-kicker">SPEEDPACK CAMPUS</span>
+              <h3>ÚNETE AL CANAL INFORMATIVO DE SPEEDPACK CAMPUS <span id="confirmation-campus"></span></h3>
+              <p>Recibe avisos de Campus Drops y ventanas de retiro de tu universidad.</p>
+              <a class="brand-button brand-button-primary" id="confirmation-channel" href="#" target="_blank" rel="noopener noreferrer" hidden>UNIRME AL CANAL →</a>
+              <p class="channel-pending" id="channel-pending" hidden>Tu campus quedó identificado. El canal se mostrará aquí cuando Speedpack lo active.</p>
+              <a class="pickup-confirmation-link" id="pickup-confirmation-link" href="./retiro.html" hidden>CONFIRMAR RETIRO EN UN CAMPUS DROP →</a>
+            </div>
             <a class="brand-button brand-button-secondary" href="#inicio">VOLVER AL INICIO</a>
             <p class="confirmation-note">Este número identifica tu solicitud; todavía no es tu código de casillero.</p>
           </section>
@@ -211,7 +224,7 @@
           </details>
           <details>
             <summary>¿REGISTRARME TIENE ALGÚN COSTO?<span>+</span></summary>
-            <p>No. Completar este formulario y solicitar tu cuenta Speed Pack no tiene costo.</p>
+            <p>No. Completar este formulario y solicitar tu cuenta Speedpack no tiene costo.</p>
           </details>
           <details>
             <summary>¿LA OFICINA DE LOS PRADOS ESTÁ ABIERTA?<span>+</span></summary>
@@ -219,7 +232,7 @@
           </details>
           <details>
             <summary>¿CÓMO PROTEGEN MIS DATOS?<span>+</span></summary>
-            <p>Los registros llegan a una hoja privada de Speed Pack y se usan únicamente para crear y administrar tu cuenta y contactarte sobre el servicio.</p>
+            <p>Los registros llegan a una hoja privada de Speedpack y se usan únicamente para crear y administrar tu cuenta y contactarte sobre el servicio.</p>
           </details>
         </div>
       </section>
@@ -227,7 +240,7 @@
       <section class="data-use-section" id="uso-de-datos" aria-labelledby="data-use-title">
         <p class="eyebrow">INFORMACIÓN CLARA</p>
         <h2 id="data-use-title">USO DE TUS DATOS.</h2>
-        <p>Speed Pack solicita nombre completo, identificación (cédula, RNC o pasaporte), correo electrónico, dirección exacta de residencia, teléfono y fecha de nacimiento para verificar tu solicitud, crear y administrar tu cuenta de courier y comunicarse contigo sobre el servicio.</p>
+        <p>Speedpack solicita nombre completo, identificación (cédula, RNC o pasaporte), correo electrónico, dirección exacta de residencia, teléfono y fecha de nacimiento para verificar tu solicitud, crear y administrar tu cuenta de courier y comunicarse contigo sobre el servicio.</p>
         <p>No solicitamos pagos ni datos de tarjetas en este formulario. Puedes pedir información, corrección o eliminación de tus datos respondiendo al contacto oficial por el que recibas tu código.</p>
       </section>
     </main>
@@ -237,10 +250,10 @@
     </div>
 
     <footer class="site-footer">
-      <img src="./assets/speedpack-logo-neon.svg" alt="Speed Pack" width="250" height="58">
+      <img src="./assets/speedpack-logo-neon.svg" alt="Speedpack" width="250" height="58">
       <p>FAST · VELOZ · SPEED</p>
       <nav aria-label="Información"><a href="#uso-de-datos">USO DE DATOS</a><a href="#preguntas">PREGUNTAS</a><a href="#registro">REGISTRO</a></nav>
-      <small>© <span id="current-year"></span> SPEED PACK.</small>
+      <small>© <span id="current-year"></span> SPEEDPACK.</small>
     </footer>
   </body>
 </html>

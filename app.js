@@ -1,9 +1,12 @@
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlgMaSfu7ov7sCVhkNifiWI_vnP_jVyZ2HgcrTeVsaJOdrwx2DcX9cFt3hgNyZabe8/exec';
+import { UNIVERSITY_CONFIG, campaignContext, isValidWhatsAppChannel } from './campaign-config.js?v=2.0.0';
 
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlgMaSfu7ov7sCVhkNifiWI_vnP_jVyZ2HgcrTeVsaJOdrwx2DcX9cFt3hgNyZabe8/exec';
 const $ = (selector, scope = document) => scope.querySelector(selector);
 const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
 const form = $('#registration-form');
 const startedAt = Date.now();
+const context = campaignContext();
+const runtimeUniversities = Object.fromEntries(Object.entries(UNIVERSITY_CONFIG).map(([slug, university]) => [slug, { ...university }]));
 
 function fieldValue(name) {
   const control = form.elements[name];
@@ -42,9 +45,7 @@ function showErrors(errors, { focus = true } = {}) {
 function normalizePhone(value) {
   let digits = value.replace(/\D/g, '');
   if (digits.length === 10) digits = `1${digits}`;
-  return digits.length === 11 && digits.startsWith('1') && ['809', '829', '849'].includes(digits.slice(1, 4))
-    ? `+${digits}`
-    : null;
+  return digits.length === 11 && digits.startsWith('1') && ['809', '829', '849'].includes(digits.slice(1, 4)) ? `+${digits}` : null;
 }
 
 function validCedula(value) {
@@ -70,8 +71,7 @@ function validRnc(value) {
 }
 
 function validPassport(value) {
-  const normalized = value.trim().toUpperCase();
-  return /^[A-Z0-9][A-Z0-9-]{4,18}[A-Z0-9]$/.test(normalized);
+  return /^[A-Z0-9][A-Z0-9-]{4,18}[A-Z0-9]$/.test(value.trim().toUpperCase());
 }
 
 function localDateString(date = new Date()) {
@@ -86,12 +86,7 @@ function validBirthDate(value) {
   const [day, month, year] = value.split('/').map(Number);
   const date = new Date(Date.UTC(year, month - 1, day, 12));
   const isoDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-  return !Number.isNaN(date.valueOf())
-    && date.getUTCFullYear() === year
-    && date.getUTCMonth() === month - 1
-    && date.getUTCDate() === day
-    && year >= 1900
-    && isoDate <= localDateString();
+  return !Number.isNaN(date.valueOf()) && date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day && year >= 1900 && isoDate <= localDateString();
 }
 
 function birthDateToISO(value) {
@@ -106,33 +101,17 @@ function documentTypeLabel(type) {
 function validateForm() {
   const errors = {};
   const fullName = fieldValue('fullName').replace(/\s+/g, ' ');
-  if (fullName.length < 5 || fullName.length > 120 || fullName.split(' ').filter(Boolean).length < 2 || !/^[\p{L}\p{M}'’\-. ]+$/u.test(fullName)) {
-    errors.fullName = 'Escribe al menos un nombre y un apellido, sin números.';
-  }
+  if (fullName.length < 5 || fullName.length > 120 || fullName.split(' ').filter(Boolean).length < 2 || !/^[\p{L}\p{M}'’\-. ]+$/u.test(fullName)) errors.fullName = 'Escribe al menos un nombre y un apellido, sin números.';
   const documentType = fieldValue('documentType');
   const documentNumber = fieldValue('documentNumber');
-  if (documentType === 'cedula' && !validCedula(documentNumber)) {
-    errors.documentNumber = 'La cédula no supera la verificación. Revisa los 11 dígitos.';
-  } else if (documentType === 'rnc' && !validRnc(documentNumber)) {
-    errors.documentNumber = 'El RNC no supera la verificación. Revisa los 9 dígitos.';
-  } else if (documentType === 'pasaporte' && !validPassport(documentNumber)) {
-    errors.documentNumber = 'Escribe un pasaporte válido de 6 a 20 caracteres.';
-  }
-  if (!validBirthDate(fieldValue('birthDate'))) {
-    errors.birthDate = 'Escribe una fecha válida con el formato DD/MM/AAAA.';
-  }
-  if (!normalizePhone(fieldValue('phone'))) {
-    errors.phone = 'Usa un número dominicano válido: 809, 829 o 849.';
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(fieldValue('email'))) {
-    errors.email = 'Escribe un correo electrónico válido.';
-  }
-  if (fieldValue('addressLine').replace(/\s+/g, ' ').length < 15) {
-    errors.addressLine = 'Agrega calle, número, sector, municipio y provincia.';
-  }
-  if (!fieldValue('privacyConsent')) {
-    errors.privacyConsent = 'Debes autorizar el uso de los datos para crear tu cuenta.';
-  }
+  if (documentType === 'cedula' && !validCedula(documentNumber)) errors.documentNumber = 'La cédula no supera la verificación. Revisa los 11 dígitos.';
+  else if (documentType === 'rnc' && !validRnc(documentNumber)) errors.documentNumber = 'El RNC no supera la verificación. Revisa los 9 dígitos.';
+  else if (documentType === 'pasaporte' && !validPassport(documentNumber)) errors.documentNumber = 'Escribe un pasaporte válido de 6 a 20 caracteres.';
+  if (!validBirthDate(fieldValue('birthDate'))) errors.birthDate = 'Escribe una fecha válida con el formato DD/MM/AAAA.';
+  if (!normalizePhone(fieldValue('phone'))) errors.phone = 'Usa un número dominicano válido: 809, 829 o 849.';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(fieldValue('email'))) errors.email = 'Escribe un correo electrónico válido.';
+  if (fieldValue('addressLine').replace(/\s+/g, ' ').length < 15) errors.addressLine = 'Agrega calle, número, sector, municipio y provincia.';
+  if (!fieldValue('privacyConsent')) errors.privacyConsent = 'Debes autorizar el uso de los datos para crear tu cuenta.';
   if (fieldValue('website')) errors.form = 'No pudimos procesar el registro.';
   showErrors(errors);
   return !Object.keys(errors).length;
@@ -146,21 +125,25 @@ function createConfirmationCode() {
 }
 
 function payloadFromForm(confirmationCode) {
-  const query = new URLSearchParams(location.search);
   const documentType = fieldValue('documentType');
-  const documentNumber = fieldValue('documentNumber').toUpperCase();
   return {
+    action: 'register',
     fullName: fieldValue('fullName').replace(/\s+/g, ' '),
     documentType,
-    documentNumber: `${documentTypeLabel(documentType)}: ${documentNumber}`,
+    documentNumber: `${documentTypeLabel(documentType)}: ${fieldValue('documentNumber').toUpperCase()}`,
     birthDate: birthDateToISO(fieldValue('birthDate')),
     phone: normalizePhone(fieldValue('phone')),
     email: fieldValue('email').toLowerCase(),
     addressLine: fieldValue('addressLine').replace(/\s+/g, ' '),
     privacyConsent: 'true',
     confirmationCode,
-    campaign: query.get('campaign') || 'general',
-    origin: query.get('src') || query.get('utm_source') || 'qr-general',
+    source: context.sourceType,
+    campus: context.campus,
+    campaign: context.campaign,
+    sourceQr: context.sourceQr,
+    pieceType: context.pieceType,
+    pieceId: context.pieceId,
+    origin: window.location.href,
     website: fieldValue('website'),
     startedAt: String(startedAt),
   };
@@ -169,11 +152,6 @@ function payloadFromForm(confirmationCode) {
 async function submitRegistration(event) {
   event.preventDefault();
   if (!validateForm()) return;
-  if (!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(APPS_SCRIPT_URL)) {
-    showErrors({ form: 'El registro está en preparación. Inténtalo nuevamente en unos minutos.' });
-    return;
-  }
-
   const button = $('#submit-registration');
   const label = button.querySelector('span');
   const originalLabel = label.textContent;
@@ -181,17 +159,9 @@ async function submitRegistration(event) {
   button.disabled = true;
   label.textContent = 'ENVIANDO...';
   clearErrors();
-
   try {
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: new URLSearchParams(payloadFromForm(confirmationCode)),
-    });
-    renderConfirmation({
-      firstName: fieldValue('fullName').split(/\s+/)[0],
-      confirmationCode,
-    });
+    await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(payloadFromForm(confirmationCode)) });
+    renderConfirmation({ firstName: fieldValue('fullName').split(/\s+/)[0], confirmationCode });
   } catch {
     showErrors({ form: 'No pudimos enviar el registro. Revisa tu conexión e inténtalo otra vez.' });
   } finally {
@@ -200,15 +170,71 @@ async function submitRegistration(event) {
   }
 }
 
+function universityForContext() {
+  return context.campus ? runtimeUniversities[context.campus] : null;
+}
+
 function renderConfirmation(registration) {
   form.hidden = true;
   const confirmation = $('#confirmation');
   confirmation.hidden = false;
   $('#confirmation-name').textContent = registration.firstName.toUpperCase();
   $('#confirmation-code').textContent = registration.confirmationCode;
+  const university = universityForContext();
+  const followup = $('#campus-followup');
+  if (context.sourceType === 'universidad' && university) {
+    followup.hidden = false;
+    $('#confirmation-campus').textContent = university.name;
+    const channel = $('#confirmation-channel');
+    const pending = $('#channel-pending');
+    if (isValidWhatsAppChannel(university.channelUrl)) {
+      channel.href = university.channelUrl;
+      channel.hidden = false;
+      pending.hidden = true;
+    } else {
+      channel.hidden = true;
+      pending.hidden = false;
+    }
+    const pickupLink = $('#pickup-confirmation-link');
+    pickupLink.href = `./retiro.html?campus=${encodeURIComponent(context.campus)}&request=${encodeURIComponent(registration.confirmationCode)}`;
+    pickupLink.hidden = false;
+  } else {
+    followup.hidden = true;
+  }
   confirmation.scrollIntoView({ behavior: 'smooth', block: 'center' });
   $('#confirmation-title').focus({ preventScroll: true });
   $('#mobile-cta').hidden = true;
+}
+
+function applyCampaignContext() {
+  const university = universityForContext();
+  document.body.dataset.source = context.sourceType;
+  $('#campaign-source-badge').textContent = context.sourceType === 'universidad' ? 'UNIVERSIDAD' : 'VÍA PÚBLICA';
+  $('#campaign-campus-name').textContent = university ? `SPEEDPACK CAMPUS ${university.name}` : 'REGISTRO GENERAL';
+  $('#campaign-piece-code').textContent = `${context.pieceType.replaceAll('_', ' ')} · ${context.pieceId}`.toUpperCase();
+  $('#source-warning').hidden = !context.invalidCampus;
+  if (university) {
+    $('#campaign-system-code').textContent = `SPEEDPACK://CAMPUS/${university.slug.toUpperCase()}`;
+    $('#campaign-eyebrow').textContent = `SPEEDPACK CAMPUS · ${university.name}`;
+    $('#campaign-headline').innerHTML = 'COMPRA ONLINE.<br>RECIBE EN <span class="no-break">C<span class="accented-letter accented-a" aria-hidden="true">A</span>MPUS.</span>';
+    $('#campaign-headline').setAttribute('aria-label', 'Compra online. Recibe en campus.');
+    $('#campaign-description').textContent = `Crea tu cuenta Speedpack desde ${university.name}. Tu registro quedará vinculado únicamente a este campus.`;
+    $('#trust-rate').textContent = 'CAMPUS IDENTIFICADO';
+  }
+}
+
+async function loadUniversityChannels() {
+  try {
+    const response = await fetch(`${APPS_SCRIPT_URL}?action=config`, { method: 'GET' });
+    if (!response.ok) return;
+    const payload = await response.json();
+    (payload.universities || []).forEach((item) => {
+      if (!runtimeUniversities[item.slug] || !item.active) return;
+      runtimeUniversities[item.slug] = { ...runtimeUniversities[item.slug], name: String(item.name || runtimeUniversities[item.slug].name), channelUrl: isValidWhatsAppChannel(item.channelUrl) ? item.channelUrl : '', pickupPoint: String(item.pickupPoint || runtimeUniversities[item.slug].pickupPoint) };
+    });
+  } catch {
+    // La configuración local mantiene el registro operativo si Google tarda en responder.
+  }
 }
 
 function formatPhone(event) {
@@ -224,11 +250,7 @@ function formatDocumentNumber(event) {
   const documentType = fieldValue('documentType');
   if (documentType === 'cedula') {
     const digits = event.target.value.replace(/\D/g, '').slice(0, 11);
-    event.target.value = digits.length <= 3
-      ? digits
-      : digits.length <= 10
-        ? `${digits.slice(0, 3)}-${digits.slice(3)}`
-        : `${digits.slice(0, 3)}-${digits.slice(3, 10)}-${digits.slice(10)}`;
+    event.target.value = digits.length <= 3 ? digits : digits.length <= 10 ? `${digits.slice(0, 3)}-${digits.slice(3)}` : `${digits.slice(0, 3)}-${digits.slice(3, 10)}-${digits.slice(10)}`;
     return;
   }
   if (documentType === 'rnc') {
@@ -240,23 +262,18 @@ function formatDocumentNumber(event) {
 
 function formatBirthDate(event) {
   const digits = event.target.value.replace(/\D/g, '').slice(0, 8);
-  event.target.value = digits.length <= 2
-    ? digits
-    : digits.length <= 4
-      ? `${digits.slice(0, 2)}/${digits.slice(2)}`
-      : `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+  event.target.value = digits.length <= 2 ? digits : digits.length <= 4 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
 }
 
 function updateDocumentField() {
   const type = fieldValue('documentType');
   const input = $('#document-number');
-  const label = $('#document-number-label');
   const settings = {
     cedula: { label: 'NÚMERO DE CÉDULA', placeholder: '000-0000000-0', inputMode: 'numeric', maxLength: 13 },
     rnc: { label: 'NÚMERO DE RNC', placeholder: '000000000', inputMode: 'numeric', maxLength: 9 },
     pasaporte: { label: 'NÚMERO DE PASAPORTE', placeholder: 'Ej. PA1234567', inputMode: 'text', maxLength: 20 },
   }[type];
-  label.textContent = settings.label;
+  $('#document-number-label').textContent = settings.label;
   input.placeholder = settings.placeholder;
   input.inputMode = settings.inputMode;
   input.maxLength = settings.maxLength;
@@ -267,39 +284,31 @@ function updateDocumentField() {
 
 function updateConsentStatus() {
   const consent = $('#privacy-consent');
-  const panel = $('#consent-panel');
-  const status = $('#privacyConsent-status');
-  panel.classList.toggle('is-authorized', consent.checked);
-  status.hidden = !consent.checked;
+  $('#consent-panel').classList.toggle('is-authorized', consent.checked);
+  $('#privacyConsent-status').hidden = !consent.checked;
 }
 
-function init() {
+async function init() {
   $('#current-year').textContent = new Date().getFullYear();
+  applyCampaignContext();
+  await loadUniversityChannels();
+  applyCampaignContext();
   form.addEventListener('submit', submitRegistration);
   $('#phone').addEventListener('input', formatPhone);
   $('#document-type').addEventListener('change', updateDocumentField);
   $('#document-number').addEventListener('input', formatDocumentNumber);
   $('#birth-date').addEventListener('input', formatBirthDate);
   $('#privacy-consent').addEventListener('change', updateConsentStatus);
-  $('#consent-panel').addEventListener('click', (event) => {
-    if (event.target.closest('input, label, a')) return;
-    $('#privacy-consent').click();
-  });
-  $('#address-line').addEventListener('input', (event) => {
-    $('#address-count').textContent = `${event.target.value.length}/300`;
-  });
-  $$('[data-start-registration]').forEach((link) => link.addEventListener('click', () => {
-    setTimeout(() => $('#full-name').focus({ preventScroll: true }), 500);
-  }));
+  $('#consent-panel').addEventListener('click', (event) => { if (!event.target.closest('input, label, a')) $('#privacy-consent').click(); });
+  $('#address-line').addEventListener('input', (event) => { $('#address-count').textContent = `${event.target.value.length}/300`; });
+  $$('[data-start-registration]').forEach((link) => link.addEventListener('click', () => setTimeout(() => $('#full-name').focus({ preventScroll: true }), 500)));
   $('#copy-code').addEventListener('click', async () => {
     const button = $('#copy-code');
     await navigator.clipboard.writeText($('#confirmation-code').textContent).catch(() => {});
     button.textContent = 'COPIADO';
     setTimeout(() => { button.textContent = 'COPIAR'; }, 1300);
   });
-  const observer = new IntersectionObserver(([entry]) => {
-    $('#mobile-cta').classList.toggle('is-dismissed', entry.isIntersecting);
-  }, { threshold: 0.08 });
+  const observer = new IntersectionObserver(([entry]) => $('#mobile-cta').classList.toggle('is-dismissed', entry.isIntersecting), { threshold: 0.08 });
   observer.observe($('#registro'));
 }
 

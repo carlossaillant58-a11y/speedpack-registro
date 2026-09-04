@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#331A63">
+    <meta name="robots" content="noindex">
+    <title>Speedpack Campus · Confirmar retiro</title>
+    <link rel="icon" href="./assets/speedpack-app-icon.png" type="image/png">
+    <link rel="stylesheet" href="./styles.css?v=2.0.0">
+    <script type="module" src="./retiro.js?v=2.0.0"></script>
+  </head>
+  <body class="pickup-page">
+    <main class="pickup-shell">
+      <a href="./"><img class="pickup-logo" src="./assets/speedpack-logo-neon.svg" alt="Speedpack" width="250" height="58"></a>
+      <section class="pickup-window">
+        <header><span>SPEEDPACK_CAMPUS</span><span>— □ ×</span></header>
+        <div class="pickup-body">
+          <p class="eyebrow">RETIRO UNIVERSITARIO</p>
+          <h1>CONFIRMA TU CAMPUS DROP.</h1>
+          <p>Usa este formulario únicamente cuando Speedpack haya anunciado una fecha de retiro en tu universidad.</p>
+          <form class="pickup-form" id="pickup-form" novalidate>
+            <div class="form-message" id="pickup-message" role="alert" hidden></div>
+            <div class="field">
+              <label for="pickup-campus"><span>01</span> UNIVERSIDAD</label>
+              <div class="select-wrap"><select id="pickup-campus" name="campus" required></select></div>
+              <p class="field-error" id="pickupCampus-error"></p>
+            </div>
+            <div class="field">
+              <label for="pickup-request"><span>02</span> NÚMERO DE SOLICITUD</label>
+              <input id="pickup-request" name="confirmationCode" type="text" inputmode="text" maxlength="12" placeholder="SP-XXXX-XXXX" required>
+              <p class="field-hint">Está en la confirmación que recibiste al registrarte.</p>
+              <p class="field-error" id="pickupRequest-error"></p>
+            </div>
+            <div class="field">
+              <label for="pickup-date"><span>03</span> FECHA DEL CAMPUS DROP</label>
+              <input id="pickup-date" name="campusDropDate" type="date" required>
+              <p class="field-error" id="pickupDate-error"></p>
+            </div>
+            <div class="consent-panel" id="pickup-consent-panel">
+              <div class="consent-choice">
+                <input id="pickup-consent" type="checkbox" required>
+                <label for="pickup-consent">Confirmo que retiraré mi paquete en la fecha y universidad seleccionadas.</label>
+              </div>
+              <p class="field-error" id="pickupConsent-error"></p>
+            </div>
+            <button class="brand-button brand-button-primary submit-button" id="pickup-submit" type="submit"><span>CONFIRMAR RETIRO</span><b>→</b></button>
+          </form>
+          <div class="pickup-result" id="pickup-result" hidden>
+            <strong>RETIRO CONFIRMADO ✓</strong>
+            <p>Tu confirmación fue enviada al equipo de Speedpack Campus.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
